@@ -2,7 +2,7 @@
   "name": "free-tts-for-code",
   "displayName": "Free TTS for Code",
   "description": "Local text-to-speech using Piper — reads code aloud",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -84,8 +84,7 @@
       ],
       "commandPalette": [
         {
-          "command": "free-tts.readAloud",
-          "when": "editorHasSelection"
+          "command": "free-tts.readAloud"
         },
         {
           "command": "free-tts.stopPlayback"
@@ -94,7 +93,14 @@
           "command": "free-tts.selectVoice"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "free-tts.readAloud",
+        "key": "alt+shift+v",
+        "when": "editorTextFocus || terminalFocus"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

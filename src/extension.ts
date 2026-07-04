@@ -118,11 +118,12 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 	const editor = vscode.window.activeTextEditor;
 	if (editor) text = editor.document.getText(editor.selection);
 
-
 	// Fallback: try terminal selection
 	if (!text?.trim()) {
 		try {
-			await vscode.commands.executeCommand("workbench.action.terminal.copySelection");
+			await vscode.commands.executeCommand(
+				"workbench.action.terminal.copySelection",
+			);
 			await new Promise((r) => setTimeout(r, 100));
 			text = (await vscode.env.clipboard.readText()).trim();
 		} catch {
