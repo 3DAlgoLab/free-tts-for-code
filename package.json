@@ -2,7 +2,7 @@
   "name": "free-tts-for-code",
   "displayName": "Free TTS for Code",
   "description": "Local text-to-speech using Piper — reads code aloud",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.96.0"
   },

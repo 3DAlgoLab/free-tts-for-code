@@ -164,17 +164,12 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 	const platform = os.platform();
 	const isWindows = platform === "win32";
 
-	// Windows: write WAV to temp file, play with PowerShell
-	// Others: pipe raw PCM directly to afplay/aplay
 	if (isWindows) {
 		tmpWavPath = path.join(os.tmpdir(), `free-tts-${Date.now()}.wav`);
 		const piper = spawn(
 			piperPath,
 			["--model", voicePath, "--output-file", tmpWavPath],
-			{
-				cwd: path.dirname(piperPath),
-				windowsHide: true,
-			},
+			{ cwd: path.dirname(piperPath), windowsHide: true },
 		);
 		piperProcess = piper;
 
@@ -201,14 +196,9 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 			stopPlayback();
 		});
 	} else {
-		// macOS/Linux: pipe raw PCM to audio player
-		const playerCmd =
-			platform === "darwin"
-				? { command: "afplay", args: ["-"] }
-				: {
-						command: "aplay",
-						args: ["-r", "22050", "-f", "S16_LE", "-t", "raw", "-"],
-					};
+		const playerCmd = platform === "darwin"
+			? { command: "afplay", args: ["-"] }
+			: { command: "aplay", args: ["-r", "22050", "-f", "S16_LE", "-t", "raw", "-"] };
 
 		const piper = spawn(piperPath, ["--model", voicePath, "--output-raw"], {
 			cwd: path.dirname(piperPath),
@@ -221,10 +211,7 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 		piper.stdin.write(filtered.slice(0, MAX_TEXT_LENGTH));
 		piper.stdin.end();
 
-		piper.on("close", () => {
-			player.stdin?.end();
-		});
-
+		piper.on("close", () => player.stdin?.end());
 		piper.on("error", (e) => {
 			vscode.window.showErrorMessage(`Piper error: ${e.message}`);
 			stopPlayback();
@@ -273,39 +260,12 @@ async function downloadAssets(context: vscode.ExtensionContext): Promise<void> {
 
 	try {
 		await progress;
-		vscode.window.showInformationMessage(
-			"Free TTS assets downloaded successfully!",
-		);
+		vscode.window.showInformationMessage("Free TTS assets downloaded!");
 	} catch (e) {
-		const msg =
-			(e as Error).message === "Cancelled"
-				? "Download cancelled."
-				: `Download failed: ${(e as Error).message}`;
+		const msg = (e as Error).message === "Cancelled"
+			? "Download cancelled."
+			: `Download failed: ${(e as Error).message}`;
 		vscode.window.showErrorMessage(msg);
-	}
-
-	// Auto-download assets on first run
-	try {
-		const piperPath = getPiperPath(context);
-		const voicesDir = path.join(context.extensionUri.fsPath, "voices");
-		const hasPiper = fs.existsSync(piperPath);
-		const hasVoices =
-			fs.existsSync(voicesDir) &&
-			fs.readdirSync(voicesDir).some((f) => f.endsWith(".onnx"));
-
-		if (!hasPiper || !hasVoices) {
-			const missing = !hasPiper ? "Piper engine" : "voice models";
-			vscode.window
-				.showInformationMessage(
-					`Free TTS: ${missing} not found. Download now?`,
-					"Download",
-				)
-				.then((action) => {
-					if (action === "Download") downloadAssets(context);
-				});
-		}
-	} catch {
-		/* ignore startup checks */
 	}
 }
 
@@ -320,7 +280,7 @@ export function activate(context: vscode.ExtensionContext) {
 		),
 	);
 
-	// Set execute permissions on Linux/macOS (only if not already executable)
+	// Set execute permissions on Linux/macOS
 	if (os.platform() === "linux" || os.platform() === "darwin") {
 		try {
 			const piperPath = getPiperPath(context);
@@ -333,6 +293,22 @@ export function activate(context: vscode.ExtensionContext) {
 		} catch {
 			/* ignore */
 		}
+	}
+
+	// Auto-download assets on first run
+	try {
+		const piperPath = getPiperPath(context);
+		const voicesDir = path.join(context.extensionUri.fsPath, "voices");
+		const hasPiper = fs.existsSync(piperPath);
+		const hasVoices =
+			fs.existsSync(voicesDir) &&
+			fs.readdirSync(voicesDir).some((f) => f.endsWith(".onnx"));
+
+		if (!hasPiper || !hasVoices) {
+			downloadAssets(context);
+		}
+	} catch {
+		/* ignore startup checks */
 	}
 }
 
