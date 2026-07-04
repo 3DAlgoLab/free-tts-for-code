@@ -2,7 +2,14 @@
   "name": "free-tts-for-code",
   "displayName": "Free TTS for Code",
   "description": "Local text-to-speech using Piper — reads code aloud",
-  "version": "0.1.6",
+  "version": "0.1.8",
+  "publisher": "3dalgolab-8201",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3DAlgoLab/free-tts-for-code"
+  },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.96.0"
   },

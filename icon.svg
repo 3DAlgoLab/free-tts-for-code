@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded background -->
+  <rect x="4" y="4" width="120" height="120" rx="28" ry="28" fill="url(#bg)"/>
+
+  <!-- Left brace { -->
+  <path d="M42,22 C34,22 28,28 28,36 L28,48 C28,52 30,54 34,56 C30,58 28,60 28,64 L28,76 C28,84 34,90 42,90" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Right brace } -->
+  <path d="M86,22 C94,22 100,28 100,36 L100,48 C100,52 98,54 94,56 C98,58 100,60 100,64 L100,76 C100,84 94,90 86,90" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Play triangle -->
+  <polygon points="60,46 60,72 80,59" fill="#fff"/>
+
+  <!-- "FREE" text -->
+  <text x="64" y="112" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle" letter-spacing="3">FREE</text>
+</svg>

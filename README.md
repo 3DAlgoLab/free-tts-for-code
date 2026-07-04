@@ -2,7 +2,7 @@
 
 Local text-to-speech for VS Code using [Piper](https://github.com/rhasspy/piper). Reads your code aloud — no cloud services, no API keys, fully offline.
 
-Forked from the unmaintained [Piper_TTS](https://github.com/ThreeDiveLabs/Piper_TTS) with improved text filtering, easier setup, and a more robust codebase.
+Built on [Piper_TTS](https://github.com/heyseth/Piper_TTS) with improved text filtering, easier setup, and a more robust codebase.
 
 ## Features
 
