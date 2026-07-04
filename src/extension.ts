@@ -185,7 +185,7 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 			if (tmpWavPath && fs.existsSync(tmpWavPath)) {
 				const player = spawn("powershell", [
 					"-Command",
-					`(New-Object Media.SoundPlayer '${tmpWavPath}').SyncPlay()`,
+					`(New-Object Media.SoundPlayer '${tmpWavPath}').PlaySync()`,
 				]);
 				playerProcess = player;
 			}
