@@ -1,0 +1,112 @@
+{
+  "name": "free-tts-for-code",
+  "displayName": "Free TTS for Code",
+  "description": "Local text-to-speech using Piper — reads code aloud",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "extensionKind": [
+    "ui"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:free-tts.readAloud",
+    "onCommand:free-tts.stopPlayback",
+    "onCommand:free-tts.selectVoice"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Free TTS for Code",
+      "properties": {
+        "free-tts.voice": {
+          "type": "string",
+          "default": "en_US-hfc_female-medium",
+          "description": "Voice model"
+        },
+        "free-tts.filter.normalizeWhitespace": {
+          "type": "boolean",
+          "default": true
+        },
+        "free-tts.filter.stripCarriageReturns": {
+          "type": "boolean",
+          "default": true
+        },
+        "free-tts.filter.stripControlChars": {
+          "type": "boolean",
+          "default": true
+        },
+        "free-tts.filter.stripUnicodeControl": {
+          "type": "boolean",
+          "default": true
+        },
+        "free-tts.filter.stripEmojis": {
+          "type": "boolean",
+          "default": true
+        },
+        "free-tts.filter.stripCodeSymbols": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "free-tts.readAloud",
+        "title": "Read Aloud",
+        "category": "Free TTS"
+      },
+      {
+        "command": "free-tts.stopPlayback",
+        "title": "Stop Reading",
+        "category": "Free TTS"
+      },
+      {
+        "command": "free-tts.selectVoice",
+        "title": "Select Voice",
+        "category": "Free TTS"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "free-tts.readAloud",
+          "group": "1_modification"
+        },
+        {
+          "command": "free-tts.stopPlayback",
+          "group": "1_modification"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "free-tts.readAloud",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "free-tts.stopPlayback"
+        },
+        {
+          "command": "free-tts.selectVoice"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "tsx test/preprocess.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "20.x",
+    "@types/vscode": "^1.125.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.7.3"
+  },
+  "type": "module"
+}

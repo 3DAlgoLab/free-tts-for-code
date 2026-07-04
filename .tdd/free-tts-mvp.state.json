@@ -1,0 +1,13 @@
+{
+  "name": "free-tts-mvp",
+  "features": [
+    "Extension scaffold: package.json, tsconfig.json, activation",
+    "Text filtering module: sanitizeText() with unit tests",
+    "Read aloud command: spawn Piper, pipe audio to platform player",
+    "Stop playback command",
+    "Voice selection command with quick pick",
+    "Configuration and context menu integration"
+  ],
+  "status": "active",
+  "startedAt": "2026-07-04T08:36:15.150Z"
+}

@@ -1,0 +1,10 @@
+.vscode/**
+.tdd/**
+.pi/**
+references/**
+node_modules/**
+.git/**
+*.test.ts
+test/**
+piper/**
+voices/**
