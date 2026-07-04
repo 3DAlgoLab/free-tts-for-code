@@ -196,9 +196,13 @@ async function readAloud(context: vscode.ExtensionContext): Promise<void> {
 			stopPlayback();
 		});
 	} else {
-		const playerCmd = platform === "darwin"
-			? { command: "afplay", args: ["-"] }
-			: { command: "aplay", args: ["-r", "22050", "-f", "S16_LE", "-t", "raw", "-"] };
+		const playerCmd =
+			platform === "darwin"
+				? { command: "afplay", args: ["-"] }
+				: {
+						command: "aplay",
+						args: ["-r", "22050", "-f", "S16_LE", "-t", "raw", "-"],
+					};
 
 		const piper = spawn(piperPath, ["--model", voicePath, "--output-raw"], {
 			cwd: path.dirname(piperPath),
@@ -262,9 +266,10 @@ async function downloadAssets(context: vscode.ExtensionContext): Promise<void> {
 		await progress;
 		vscode.window.showInformationMessage("Free TTS assets downloaded!");
 	} catch (e) {
-		const msg = (e as Error).message === "Cancelled"
-			? "Download cancelled."
-			: `Download failed: ${(e as Error).message}`;
+		const msg =
+			(e as Error).message === "Cancelled"
+				? "Download cancelled."
+				: `Download failed: ${(e as Error).message}`;
 		vscode.window.showErrorMessage(msg);
 	}
 }

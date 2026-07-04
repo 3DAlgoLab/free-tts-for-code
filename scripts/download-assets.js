@@ -141,22 +141,35 @@ async function main() {
 		const binDest = path.join(ROOT, "piper", localDir());
 		fs.mkdirSync(binDest, { recursive: true });
 
-		function walk(dir) {
-			for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-				const full = path.join(dir, entry.name);
-				if (entry.isDirectory()) walk(full);
-				else if (
-					entry.isFile() &&
-					/^piper(\.exe)?$|^espeak-ng|^espeak-ng\.dll|^piper_phonemize|^piper_phonemize\.dll$/.test(
-						entry.name,
-					)
-				) {
-					console.log(`  → ${entry.name}`);
-					fs.copyFileSync(full, path.join(binDest, entry.name));
+		// Copy entire extracted piper directory
+		const piperSrc = path.join(extractDir, "piper");
+		if (fs.existsSync(piperSrc)) {
+			function copyDir(s, d) {
+				fs.mkdirSync(d, { recursive: true });
+				for (const e of fs.readdirSync(s, { withFileTypes: true })) {
+					const sp = path.join(s, e.name);
+					const dp = path.join(d, e.name);
+					if (e.isDirectory()) copyDir(sp, dp);
+					else {
+						fs.copyFileSync(sp, dp);
+						console.log("  -> " + e.name);
+					}
 				}
 			}
+			copyDir(piperSrc, binDest);
+		} else {
+			function walk(dir) {
+				for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+					const full = path.join(dir, entry.name);
+					if (entry.isDirectory()) walk(full);
+					else {
+						fs.copyFileSync(full, path.join(binDest, entry.name));
+						console.log("  -> " + entry.name);
+					}
+				}
+			}
+			walk(extractDir);
 		}
-		walk(extractDir);
 
 		if (PLATFORM !== "win32") {
 			for (const bin of ["piper", "espeak-ng", "piper_phonemize"]) {
@@ -184,7 +197,7 @@ async function main() {
 			await download(voice.config, path.join(tmp, "config.json"));
 			copyAcrossDevices(
 				path.join(tmp, "config.json"),
-				path.join(voicesDir, `${voiceId}.json`),
+				path.join(voicesDir, `${voiceId}.onnx.json`),
 			);
 		}
 
