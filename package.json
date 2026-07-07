@@ -2,7 +2,7 @@
   "name": "free-tts-for-code",
   "displayName": "Free TTS for Code",
   "description": "Local text-to-speech using Piper — reads code aloud",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "publisher": "3dalgolab-8201",
   "icon": "icon.png",
   "repository": {
@@ -22,7 +22,8 @@
   "activationEvents": [
     "onCommand:free-tts.readAloud",
     "onCommand:free-tts.stopPlayback",
-    "onCommand:free-tts.selectVoice"
+    "onCommand:free-tts.selectVoice",
+    "onCommand:free-tts.downloadEngine"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -57,6 +58,12 @@
         "free-tts.filter.stripCodeSymbols": {
           "type": "boolean",
           "default": false
+        },
+        "free-tts.filter.customPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Custom regex patterns (e.g. ['\\bTODO\\b'] to delete, ['\\*\\*(.+?)\\*\\*:$1'] to unwrap markdown bold)"
         }
       }
     },
@@ -74,6 +81,11 @@
       {
         "command": "free-tts.selectVoice",
         "title": "Select Voice",
+        "category": "Free TTS"
+      },
+      {
+        "command": "free-tts.downloadEngine",
+        "title": "Download Engine & Voices",
         "category": "Free TTS"
       }
     ],
@@ -98,6 +110,9 @@
         },
         {
           "command": "free-tts.selectVoice"
+        },
+        {
+          "command": "free-tts.downloadEngine"
         }
       ]
     },

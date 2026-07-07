@@ -423,6 +423,53 @@ export function run() {
 		assert.strictEqual(result, "");
 	});
 
+	// 17. Custom patterns
+	test("customPatterns removes matching text", () => {
+		const opts = { ...defaultOpts, customPatterns: ["\\bTODO\\b"] };
+		const result = sanitizeText("This is a TODO item", opts);
+		assert.strictEqual(result, "This is a item");
+	});
+
+	test("customPatterns strips URLs", () => {
+		const opts = { ...defaultOpts, customPatterns: ["https?://\\S+"] };
+		const result = sanitizeText("See https://example.com for details", opts);
+		assert.strictEqual(result, "See for details");
+	});
+
+	test("customPatterns multiple patterns applied in order", () => {
+		const opts = { ...defaultOpts, customPatterns: ["\\bTODO\\b", "\\bFIXME\\b"] };
+		const result = sanitizeText("TODO and FIXME here", opts);
+		assert.strictEqual(result, "and here");
+	});
+
+	test("customPatterns invalid regex is skipped", () => {
+		const opts = { ...defaultOpts, customPatterns: ["[invalid"] };
+		const result = sanitizeText("Hello world", opts);
+		assert.strictEqual(result, "Hello world");
+	});
+
+	test("customPatterns empty by default", () => {
+		const result = sanitizeText("TODO: fix this");
+		assert.strictEqual(result, "TODO: fix this");
+	});
+
+	test("customPatterns unwraps markdown bold", () => {
+		const opts = { ...defaultOpts, customPatterns: ["\\*\\*(.+?)\\*\\*:$1"] };
+		const result = sanitizeText("This is **bold** text", opts);
+		assert.strictEqual(result, "This is bold text");
+	});
+
+	test("customPatterns unwraps markdown italic", () => {
+		const opts = { ...defaultOpts, customPatterns: ["\\*(.+?)\\*:$1"] };
+		const result = sanitizeText("This is *italic* text", opts);
+		assert.strictEqual(result, "This is italic text");
+	});
+
+	test("customPatterns unwraps both bold and italic", () => {
+		const opts = { ...defaultOpts, customPatterns: ["\\*\\*(.+?)\\*\\*:$1", "\\*(.+?)\\*:$1"] };
+		const result = sanitizeText("**bold** and *italic* here", opts);
+		assert.strictEqual(result, "bold and italic here");
+	});
 	// 16. voiceLabel (pure function, mirrored from extension.ts)
 	const voiceLabel = (id: string): string => {
 		const parts = id.split("-");

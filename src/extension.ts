@@ -42,7 +42,8 @@ function getFilterOptions(): FilterOptions {
 		stripControlChars: cfg.get("stripControlChars", true),
 		stripUnicodeControl: cfg.get("stripUnicodeControl", true),
 		stripEmojis: cfg.get("stripEmojis", true),
-		stripCodeSymbols: cfg.get("stripCodeSymbols", false),
+	stripCodeSymbols: cfg.get("stripCodeSymbols", false),
+		customPatterns: cfg.get("customPatterns", []),
 	};
 }
 
@@ -293,8 +294,11 @@ export function activate(context: vscode.ExtensionContext) {
 			readAloud(context),
 		),
 		vscode.commands.registerCommand("free-tts.stopPlayback", stopPlayback),
-		vscode.commands.registerCommand("free-tts.selectVoice", () =>
+	vscode.commands.registerCommand("free-tts.selectVoice", () =>
 			selectVoice(context),
+		),
+		vscode.commands.registerCommand("free-tts.downloadEngine", () =>
+			downloadAssets(context),
 		),
 	);
 

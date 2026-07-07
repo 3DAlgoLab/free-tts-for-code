@@ -9,14 +9,15 @@ Built on [Piper_TTS](https://github.com/heyseth/Piper_TTS) with improved text fi
 - **Read Aloud** — Select text in your editor and hear it spoken naturally
 - **Voice Selection** — Pick from multiple voices and languages
 - **Smart Text Filtering** — Strips non-readable characters, emojis, control codes, and optionally code symbols before synthesis
+- **Custom Filters** — Add your own regex patterns to strip or transform text (e.g. unwrap `**bold**` → `bold`) before speaking
+- **One-Click Setup** — Download TTS engine and voices directly from the VS Code command palette
 - **Fully Offline** — Everything runs locally on your machine
 - **Cross-Platform** — Windows, macOS, and Linux
-
 ## Quick Start
 
 ### 1. Install
 
-**From VSIX:** Extensions → ⋯ → Install from VSIX → select `free-tts-for-code-0.1.0.vsix`
+**From VSIX:** Extensions → ⋯ → Install from VSIX → select `free-tts-for-code-0.1.9.vsix`
 
 **From source:**
 
@@ -25,6 +26,10 @@ npm install
 ```
 
 ### 2. Download Assets
+
+**From Command Palette:** `Ctrl+Shift+P` → "Free TTS: Download Engine & Voices"
+
+**Or from script:**
 
 ```bash
 node scripts/download-assets.js
@@ -68,9 +73,7 @@ Open Settings (`Ctrl+,`) and search for "Free TTS":
 | `free-tts.filter.stripUnicodeControl` | `true` | Remove Unicode format/control characters (ZWS, BOM, etc.) |
 | `free-tts.filter.stripEmojis` | `true` | Remove emoji characters |
 | `free-tts.filter.stripCodeSymbols` | `false` | Remove `/*`, `*/`, `//`, `{}`, `()`, `<>` |
-
-## How It Works
-
+| `free-tts.filter.customPatterns` | `[]` | Custom regex patterns (e.g. `['\\*\\*(.+?)\\*\\*:$1']` to unwrap **bold**) |
 1. You select text in the editor
 2. Text passes through the **filter pipeline** (`src/filter.ts`) — strips non-speakable characters
 3. **Piper TTS engine** synthesizes speech from filtered text
@@ -87,7 +90,7 @@ free-tts-for-code/
 │   ├── extension.ts    # VS Code extension entry point
 │   └── filter.ts       # Text sanitization module
 ├── test/
-│   └── preprocess.test.ts  # 56 unit tests
+│   └── preprocess.test.ts  # 64 unit tests
 ├── scripts/
 │   └── download-assets.js  # Asset downloader
 ├── piper/              # Piper TTS binaries (downloaded)

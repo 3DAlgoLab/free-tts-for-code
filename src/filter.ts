@@ -5,6 +5,7 @@ export interface FilterOptions {
 	stripUnicodeControl: boolean;
 	stripEmojis: boolean;
 	stripCodeSymbols: boolean;
+	customPatterns: string[];
 }
 
 const defaultOptions: FilterOptions = {
@@ -14,6 +15,7 @@ const defaultOptions: FilterOptions = {
 	stripUnicodeControl: true,
 	stripEmojis: true,
 	stripCodeSymbols: false,
+	customPatterns: [],
 };
 
 const EMOJI_RE =
@@ -45,12 +47,26 @@ export function sanitizeText(
 		);
 	}
 
-	// 4. Strip emojis
+	// 4. Apply custom patterns (format: "regex" or "regex:replacement")
+	for (const pattern of opts.customPatterns) {
+		try {
+			const idx = pattern.indexOf(':');
+			const hasReplacement = idx >= 0 && pattern.slice(idx + 1).includes('$');
+			const [regexStr, replacement] = hasReplacement
+				? [pattern.slice(0, idx), pattern.slice(idx + 1)]
+				: [pattern, ""];
+			result = result.replace(new RegExp(regexStr, "gu"), replacement);
+		} catch {
+			// Invalid regex — skip silently
+		}
+	}
+
+	// 5. Strip emojis
 	if (opts.stripEmojis) {
 		result = result.replace(EMOJI_RE, "");
 	}
 
-	// 5. Strip code symbols (replace with space to preserve word separation)
+	// 6. Strip code symbols (replace with space to preserve word separation)
 	if (opts.stripCodeSymbols) {
 		result = result.replace(/\/\*/g, " "); // /*
 		result = result.replace(/\*\//g, " "); // */
@@ -58,7 +74,7 @@ export function sanitizeText(
 		result = result.replace(/[{}()<>]/g, " "); // individual chars (no / or *)
 	}
 
-	// 6. Normalize whitespace LAST (collapses spaces from all previous steps)
+	// 7. Normalize whitespace LAST (collapses spaces from all previous steps)
 	if (opts.normalizeWhitespace) {
 		result = result.replace(/\s+/g, " ").trim();
 	}
