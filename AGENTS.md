@@ -2,6 +2,11 @@
 
 Check `TODO.md` to know what you should do.
 
+## `references` folder
+
+- `Piper_TTS`: Previous codebase to look up to implement this project
+
+
 ## Release Process
 
 When releasing a new version:
@@ -11,5 +16,4 @@ When releasing a new version:
 3. `npx vsce package` to build the `.vsix`
 4. `git add . && git commit -m "feat: vX.Y.Z - short summary" && git push`
 5. Publish to marketplace: `npx vsce login 3dalgolab-8201` → `npx vsce publish`
-## `references` folder
-- `Piper_TTS`: Previous codebase to look up to implement this project
+
