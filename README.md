@@ -17,7 +17,7 @@ Built on [Piper_TTS](https://github.com/heyseth/Piper_TTS) with improved text fi
 
 ### 1. Install
 
-**From VSIX:** Extensions → ⋯ → Install from VSIX → select `free-tts-for-code-0.1.9.vsix`
+**From VSIX:** Extensions → ⋯ → Install from VSIX → select `free-tts-for-code-0.1.10.vsix`
 
 **From source:**
 
